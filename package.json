@@ -1,0 +1,11 @@
+{
+  "name": "AdventOfCode22",
+  "version": "2022.12",
+  "description": "A silly coding challenge",
+  "main": "yup",
+  "repository": "https://github.com/dburnside22/AdventOfCode22.git",
+  "author": "Dan Burnside",
+  "scripts": {
+    "new" : "npx hygen generator new --day"
+  }
+}
