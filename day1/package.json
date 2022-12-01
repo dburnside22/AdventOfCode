@@ -1,0 +1,10 @@
+{
+  "name": "day1",
+  "version": "12.1.2022",
+  "main": "day1.js",
+  "type": "module",
+
+  "scripts": {
+    "dev": "node day1.js"
+  }
+}
