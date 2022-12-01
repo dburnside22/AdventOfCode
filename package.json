@@ -5,7 +5,8 @@
   "main": "yup",
   "repository": "https://github.com/dburnside22/AdventOfCode22.git",
   "author": "Dan Burnside",
+  "license": "MIT",
   "scripts": {
-    "new" : "npx hygen generator new --day"
+    "new": "npx hygen generator new --day"
   }
 }
