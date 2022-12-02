@@ -3,7 +3,7 @@
   "version": "12.2.2022",
   "main": "day2.js",
   "type": "module",
-
+  "license": "MIT",
   "scripts": {
     "dev": "node day2.js"
   }

@@ -1,8 +1,6 @@
-const testInput = `
-A Y
+const testInput = `A Y
 B X
-C Z
-`;
+C Z`;
 
 const input = `C Y
 C Z
@@ -2503,7 +2501,6 @@ A Z
 C Z
 A X
 A Y
-B Z
-`;
+B Z`;
 
-export {testInput, input};
+export { testInput, input };
