@@ -65,7 +65,7 @@ const part1 = () => {
 
 //GJSBZDNW
 const part2 = () => {
-  console.log("Welcome To Day 5");
+  console.log("Welcome To Day 5: part 2");
   let arrays = [];
 
   const breakTheCrate = (crateToBreak) => {
@@ -103,14 +103,18 @@ const part2 = () => {
       .replace("to", "")
       .split("  ")
       .map((t) => Number(t));
-
+    let removedCrates = [];
+    const from = ins[1] - 1;
+    const to = ins[2] - 1;
     for (let i = 0; i < ins[0]; i++) {
-      const from = ins[1] - 1;
-      const to = ins[2] - 1;
-
       const removedCrate = arrays[from].pop();
-      arrays[to].push(removedCrate);
+      if (removedCrate != undefined) {
+        removedCrates.push(removedCrate);
+      }
     }
+    removedCrates.reverse().forEach((c) => {
+      arrays[to].push(c);
+    });
   });
 
   let finalString = "";

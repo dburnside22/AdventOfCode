@@ -1,8 +1,8 @@
-const testInput = `    
-    [D]    
-[N] [C]     [X]   
-[Z] [M] [P] [D]
- 1   2   3   4`;
+const testInput = `
+    [D]            
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 `;
 
 const testInstructions = `move 1 from 2 to 1
 move 3 from 1 to 3
@@ -10,7 +10,7 @@ move 2 from 2 to 1
 move 1 from 1 to 2`;
 
 const input = `
-    [B]             [B] [S]        
+    [B]             [B] [S]               
     [M]             [P] [L] [B] [J]
     [D]     [R]     [V] [D] [Q] [D]
     [T] [R] [Z]     [H] [H] [G] [C]
