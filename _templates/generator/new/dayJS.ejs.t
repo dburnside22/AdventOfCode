@@ -4,11 +4,13 @@ to: day<%= day %>/day<%= day %>.js
 
 import {input, testInput} from './input.js';
 
-const part1 = () => {
-    console.log('Welcome To Day <%= day %>')
+const part1 = (dataSource) => {
+    console.log('Welcome To Day <%= day %>');
+    const splitInput = dataSource.split('');
 }
 
-part1();
+part1(testInput);
+// part1(input);
 
 
 
