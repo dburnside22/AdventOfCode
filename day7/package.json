@@ -1,0 +1,11 @@
+{
+  "name": "day7",
+  "version": "12.7.2022",
+  "main": "day7.js",
+  "type": "module",
+  "license": "MIT",
+
+  "scripts": {
+    "dev": "node day7.js"
+  }
+}
