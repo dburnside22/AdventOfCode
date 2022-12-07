@@ -9,20 +9,15 @@ const part1 = (dataSource) => {
   let grandTotal = 0;
 
   const navigateToDirectory = (whereToNavigate) => {
-    // console.log("currentDirectory", currentDirectory);
-    // console.log("whereToNavigate", whereToNavigate);
     if (whereToNavigate[2] == "..") {
       currentDirectory.pop();
     } else {
       currentDirectory.push(whereToNavigate[2]);
     }
-    // console.log("currentDirectory", currentDirectory);
   };
 
   const processDirectories = (dirs) => {
-    // console.log("dirs", dirs);
     for (let key in dirs) {
-      // console.log(key);
       if (dirs[key] <= 100000) {
         grandTotal += Number(dirs[key]);
       }
@@ -42,7 +37,6 @@ const part1 = (dataSource) => {
   };
 
   const processList = (files) => {
-    // console.log("files", files);
     let total = 0;
     files.forEach((file) => {
       if (file[0] != "dir") {
@@ -73,7 +67,6 @@ const part1 = (dataSource) => {
   });
   processList(arrayOfFiles);
   processDirectories(directoryTotals);
-  // console.log("directories", directoryTotals);
   console.log("grandTotal", grandTotal);
 };
 
