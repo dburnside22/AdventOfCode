@@ -3,59 +3,53 @@ import { input, testInput } from "./input.js";
 const part1 = (dataSource) => {
   console.log("Welcome To Day 7");
   const splitInput = dataSource.split("\n");
-  // console.log("split input", splitInput);
 
   let directoryTotals = [];
   let currentDirectory = [];
   let grandTotal = 0;
 
   const navigateToDirectory = (whereToNavigate) => {
+    // console.log("currentDirectory", currentDirectory);
+    // console.log("whereToNavigate", whereToNavigate);
     if (whereToNavigate[2] == "..") {
       currentDirectory.pop();
     } else {
       currentDirectory.push(whereToNavigate[2]);
     }
+    // console.log("currentDirectory", currentDirectory);
   };
 
   const processDirectories = (dirs) => {
-    let array = [];
+    // console.log("dirs", dirs);
     for (let key in dirs) {
-      array.push(dirs[key]);
+      // console.log(key);
+      if (dirs[key] <= 100000) {
+        grandTotal += Number(dirs[key]);
+      }
     }
-    array.sort((a, b) => {
-      if (a < b) {
-        return 1;
-      }
-      if (b < a) {
-        return -1;
-      }
-      return 0;
-    });
+  };
 
-    array.forEach((a) => {
-      if (a <= 100000) {
-        grandTotal += a;
+  const addToAllDirectories = (numToAdd) => {
+    let fileName = "";
+    for (let i = 0; i < currentDirectory.length; i++) {
+      fileName += currentDirectory[i];
+      if (!directoryTotals[fileName]) {
+        directoryTotals[fileName] = numToAdd;
+      } else {
+        directoryTotals[fileName] += numToAdd;
       }
-    });
+    }
   };
 
   const processList = (files) => {
-    let totalSize = 0;
+    // console.log("files", files);
+    let total = 0;
     files.forEach((file) => {
       if (file[0] != "dir") {
-        totalSize += Number(file[0]);
+        total += Number(file[0]);
       }
     });
-
-    currentDirectory.forEach((dir) => {
-      if (directoryTotals[dir]) {
-        directoryTotals[dir] = directoryTotals[dir] + totalSize;
-        console.log(directoryTotals);
-      } else {
-        directoryTotals[dir] = totalSize;
-        console.log(directoryTotals);
-      }
-    });
+    addToAllDirectories(total);
   };
 
   let arrayOfFiles = [];
@@ -70,12 +64,16 @@ const part1 = (dataSource) => {
       if (splitLine[1] == "cd") {
         navigateToDirectory(splitLine);
       }
+      if (splitLine[1] == "ls") {
+        // do nothing
+      }
     } else {
       arrayOfFiles.push(splitLine);
     }
   });
   processList(arrayOfFiles);
   processDirectories(directoryTotals);
+  // console.log("directories", directoryTotals);
   console.log("grandTotal", grandTotal);
 };
 
@@ -83,4 +81,7 @@ const part1 = (dataSource) => {
 part1(input);
 
 // 827083 to low
+// 8693604 to high
+// 1705869
+
 // 1501149 the right answer
