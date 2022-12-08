@@ -7,25 +7,38 @@ const part1 = (dataSource) => {
     .map((line) => line.split("").map(Number));
   // console.log("splitInput", splitInput);
 
+  // Go ahead and get the edge
+  let visableTrees = (splitInput.length + splitInput[0].length) * 2 - 4;
+  let possiblyVisableTrees = [];
+
   const processPossibleTrees = (trees) => {
-    // I will need to loop over each of these to compare in every direction if they are shorter all the way to the edge
-    //[i: column, j: row, tree: height of tree]
     trees.forEach((tree) => {
-      console.log(tree);
+      let treeIsHidden = false;
+      let visableFromEdge = false;
+      console.log("tree", tree);
+      for (let t = 0; t < splitInput.length; t++) {
+        let isTree = t == tree[0];
+        if (splitInput[t][tree[1]] >= tree[2] == !isTree) {
+          treeIsHidden = true;
+        }
+        if (!treeIsHidden && t == splitInput.length - 1) {
+          visableFromEdge = true;
+        }
+      }
+
+      if (treeIsHidden && visableFromEdge != true) {
+        visableTrees--;
+      }
     });
   };
 
-  // Go ahead and get the edge
-  let visableTrees = splitInput.length + splitInput[0].length;
-  let possiblyVisableTrees = [];
-
-  for (let i = 1; i < splitInput.length - 1; i++) {
-    for (let j = 1; j < splitInput[i].length - 1; j++) {
-      const topNeighborTree = splitInput[i - 1][j];
-      const rightNeighborTree = splitInput[i][j + 1];
-      const bottomNeighborTree = splitInput[i + 1][j];
-      const leftNeighborTree = splitInput[i][j - 1];
-      const tree = splitInput[i][j];
+  for (let column = 1; column < splitInput.length - 1; column++) {
+    for (let row = 1; row < splitInput[column].length - 1; row++) {
+      const topNeighborTree = splitInput[column - 1][row];
+      const rightNeighborTree = splitInput[column][row + 1];
+      const bottomNeighborTree = splitInput[column + 1][row];
+      const leftNeighborTree = splitInput[column][row - 1];
+      const tree = splitInput[column][row];
 
       if (
         tree > topNeighborTree ||
@@ -33,11 +46,13 @@ const part1 = (dataSource) => {
         tree > bottomNeighborTree ||
         tree > leftNeighborTree
       ) {
-        possiblyVisableTrees.push([i, j, tree]);
+        possiblyVisableTrees.push([column, row, tree]);
       }
     }
   }
+  visableTrees += possiblyVisableTrees.length;
   processPossibleTrees(possiblyVisableTrees);
+  console.log(visableTrees);
 };
 
 part1(testInput);
