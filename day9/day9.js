@@ -17,34 +17,59 @@ const part1 = (dataSource) => {
   placesTailHit.push(`${positionOfTail[0]}${positionOfTail[1]}`);
 
   const moveTail = () => {
-    if (positionOfHead[0] - positionOfTail[0] > 1) {
+    const upToRight =
+      positionOfHead[1] - positionOfTail[1] > 0 &&
+      (positionOfHead[0] - positionOfTail[0] == 1 ||
+        positionOfHead[1] - positionOfTail[1] == 1);
+
+    const downToRight =
+      positionOfHead[1] - positionOfTail[1] > 0 &&
+      (positionOfHead[1] - positionOfTail[1] == -1 ||
+        positionOfHead[0] - positionOfTail[0] == 1);
+
+    const upToLeft =
+      positionOfHead[1] - positionOfTail[1] < 0 &&
+      (positionOfHead[0] - positionOfTail[0] == -1 ||
+        positionOfHead[1] - positionOfTail[1] == 1);
+
+    const downToLeft =
+      positionOfHead[1] - positionOfTail[1] < 0 &&
+      (positionOfHead[1] - positionOfTail[1] == -1 ||
+        positionOfHead[0] - positionOfTail[0] == -1);
+
+    const movedDiagonal = upToRight || downToLeft || upToLeft || downToRight;
+    if (!movedDiagonal) {
+      if (positionOfHead[0] - positionOfTail[0] > 1) {
+        positionOfTail[0]++;
+      }
+      if (positionOfHead[0] - positionOfTail[0] < -1) {
+        positionOfTail[0]--;
+      }
+      if (positionOfHead[1] - positionOfTail[1] > 1) {
+        positionOfTail[1]++;
+      }
+      if (positionOfHead[1] - positionOfTail[1] < -1) {
+        positionOfTail[1]--;
+      }
+    }
+    if (upToRight) {
       positionOfTail[0]++;
-    }
-    if (positionOfHead[0] - positionOfTail[0] < -1) {
-      positionOfTail[0]--;
-    }
-    if (positionOfHead[1] - positionOfTail[1] > 1) {
       positionOfTail[1]++;
     }
-    if (positionOfHead[1] - positionOfTail[1] < -1) {
-      positionOfTail[1]--;
-    }
-    if (positionOfHead[0] - positionOfTail[1] > 1) {
-      positionOfTail[1]++;
+    if (downToRight) {
       positionOfTail[0]++;
-    }
-    if (positionOfHead[0] - positionOfTail[1] < -1) {
       positionOfTail[1]--;
+    }
+    if (upToLeft) {
       positionOfTail[0]--;
-    }
-    if (positionOfHead[1] - positionOfTail[0] > 1) {
-      positionOfTail[0]++;
       positionOfTail[1]++;
     }
-    if (positionOfHead[1] - positionOfTail[0] < -1) {
+    if (downToLeft) {
       positionOfTail[0]--;
       positionOfTail[1]--;
     }
+
+    console.log("position of head", positionOfHead);
     console.log("position of tail", positionOfTail);
   };
 
@@ -53,17 +78,35 @@ const part1 = (dataSource) => {
       positionOfHead[0] == positionOfTail[0] &&
       positionOfHead[1] == positionOfTail[1];
 
-    const headIsToFar =
+    const movedUpDownLeftOrRight =
       positionOfHead[0] - positionOfTail[0] > 1 ||
       positionOfHead[0] - positionOfTail[0] < -1 ||
       positionOfHead[1] - positionOfTail[1] > 1 ||
-      positionOfHead[1] - positionOfTail[1] < -1 ||
-      positionOfHead[0] - positionOfTail[1] > 1 ||
-      positionOfHead[0] - positionOfTail[1] < -1 ||
-      positionOfHead[1] - positionOfTail[0] > 1 ||
-      positionOfHead[1] - positionOfTail[0] < -1;
+      positionOfHead[1] - positionOfTail[1] < -1;
 
-    if (!headAndTailOverLap && headIsToFar) {
+    const upToRight =
+      positionOfHead[1] - positionOfTail[1] > 0 &&
+      (positionOfHead[0] - positionOfTail[0] == 1 ||
+        positionOfHead[1] - positionOfTail[1] == 1);
+
+    const downToRight =
+      positionOfHead[1] - positionOfTail[1] > 0 &&
+      (positionOfHead[1] - positionOfTail[1] == -1 ||
+        positionOfHead[0] - positionOfTail[0] == 1);
+
+    const upToLeft =
+      positionOfHead[1] - positionOfTail[1] < 0 &&
+      (positionOfHead[0] - positionOfTail[0] == -1 ||
+        positionOfHead[1] - positionOfTail[1] == 1);
+
+    const downToLeft =
+      positionOfHead[1] - positionOfTail[1] < 0 &&
+      (positionOfHead[1] - positionOfTail[1] == -1 ||
+        positionOfHead[0] - positionOfTail[0] == -1);
+
+    const movedDiagonal = upToRight || downToLeft || upToLeft || downToRight;
+
+    if (!headAndTailOverLap && (movedUpDownLeftOrRight || movedDiagonal)) {
       moveTail();
     }
   };
