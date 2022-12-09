@@ -14,7 +14,39 @@ const part1 = (dataSource) => {
   let placesTailHit = [];
   let positionOfTail = [0, 0];
   let positionOfHead = [0, 0];
-  placesTailHit.push(positionOfTail);
+  placesTailHit.push(`${positionOfTail[0]}${positionOfTail[1]}`);
+
+  const moveTail = () => {
+    if (positionOfHead[0] - positionOfTail[0] > 1) {
+      positionOfTail[0]++;
+    }
+    if (positionOfHead[0] - positionOfTail[0] < -1) {
+      positionOfTail[0]--;
+    }
+    if (positionOfHead[1] - positionOfTail[1] > 1) {
+      positionOfTail[1]++;
+    }
+    if (positionOfHead[1] - positionOfTail[1] < -1) {
+      positionOfTail[1]--;
+    }
+    if (positionOfHead[0] - positionOfTail[1] > 1) {
+      positionOfTail[1]++;
+      positionOfTail[0]++;
+    }
+    if (positionOfHead[0] - positionOfTail[1] < -1) {
+      positionOfTail[1]--;
+      positionOfTail[0]--;
+    }
+    if (positionOfHead[1] - positionOfTail[0] > 1) {
+      positionOfTail[0]++;
+      positionOfTail[1]++;
+    }
+    if (positionOfHead[1] - positionOfTail[0] < -1) {
+      positionOfTail[0]--;
+      positionOfTail[1]--;
+    }
+    console.log("position of tail", positionOfTail);
+  };
 
   const checkOnTail = () => {
     const headAndTailOverLap =
@@ -30,6 +62,10 @@ const part1 = (dataSource) => {
       positionOfHead[0] - positionOfTail[1] < -1 ||
       positionOfHead[1] - positionOfTail[0] > 1 ||
       positionOfHead[1] - positionOfTail[0] < -1;
+
+    if (!headAndTailOverLap && headIsToFar) {
+      moveTail();
+    }
   };
 
   const moveHead = (instruction) => {
@@ -53,6 +89,7 @@ const part1 = (dataSource) => {
   splitInput.forEach((instruction) => {
     moveHead(instruction);
   });
+  console.log("totalOfPlacesTailHit", placesTailHit.length);
 };
 
 part1(testInput);
