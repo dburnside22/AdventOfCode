@@ -5,7 +5,6 @@ const part1 = (dataSource) => {
   const splitInput = dataSource
     .split("\n")
     .map((line) => line.split("").map(Number));
-  // console.log("splitInput", splitInput);
 
   // Go ahead and get the edge
   let visableTrees = (splitInput.length + splitInput[0].length) * 2 - 4;
@@ -13,21 +12,59 @@ const part1 = (dataSource) => {
 
   const processPossibleTrees = (trees) => {
     trees.forEach((tree) => {
-      let treeIsHidden = false;
+      let treeIsHiddenOnTop = false;
+      let treeIsHiddenOnBottom = false;
+      let treeIsHiddenOnRight = false;
+      let treeIsHiddenOnLeft = false;
       let visableFromEdge = false;
-      console.log("tree", tree);
-      for (let t = 0; t < splitInput.length; t++) {
-        let isTree = t == tree[0];
-        if (splitInput[t][tree[1]] >= tree[2] == !isTree) {
-          treeIsHidden = true;
+
+      for (let t = 0; t < tree[0]; t++) {
+        const top = splitInput[t][tree[1]];
+        if (top >= tree[2]) {
+          treeIsHiddenOnTop = true;
         }
-        if (!treeIsHidden && t == splitInput.length - 1) {
+        if (!treeIsHiddenOnTop && t == tree[0] - 1) {
           visableFromEdge = true;
         }
       }
+      if (!visableFromEdge) {
+        for (let b = tree[0] + 1; b < splitInput.length; b++) {
+          const bottom = splitInput[b][tree[1]];
+          if (bottom >= tree[2]) {
+            treeIsHiddenOnBottom = true;
+          }
+          if (!treeIsHiddenOnBottom && b == splitInput.length - 1) {
+            visableFromEdge = true;
+          }
+        }
+      }
 
-      if (treeIsHidden && visableFromEdge != true) {
-        visableTrees--;
+      if (!visableFromEdge) {
+        for (let r = tree[1] + 1; r < splitInput[0].length; r++) {
+          const right = splitInput[tree[0]][r];
+          if (right >= tree[2]) {
+            treeIsHiddenOnRight = true;
+          }
+          if (!treeIsHiddenOnRight && r == splitInput[0].length - 1) {
+            visableFromEdge = true;
+          }
+        }
+      }
+
+      if (!visableFromEdge) {
+        for (let l = 0; l < tree[1]; l++) {
+          const left = splitInput[tree[0]][l];
+          if (left >= tree[2]) {
+            treeIsHiddenOnLeft = true;
+          }
+          if (!treeIsHiddenOnLeft && l == tree[1] - 1) {
+            visableFromEdge = true;
+          }
+        }
+      }
+
+      if (visableFromEdge) {
+        visableTrees++;
       }
     });
   };
@@ -50,10 +87,12 @@ const part1 = (dataSource) => {
       }
     }
   }
-  visableTrees += possiblyVisableTrees.length;
   processPossibleTrees(possiblyVisableTrees);
   console.log(visableTrees);
 };
 
-part1(testInput);
-// part1(input);
+// part1(testInput);
+part1(input);
+
+// 6689 to high
+// the right number 1816
