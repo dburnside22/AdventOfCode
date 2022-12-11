@@ -17,27 +17,21 @@ const part1 = (dataSource) => {
   placesTailHit.push(`${positionOfTail[0]}${positionOfTail[1]}`);
 
   const moveTail = () => {
-    const upToRight =
-      positionOfHead[1] - positionOfTail[1] > 0 &&
-      (positionOfHead[0] - positionOfTail[0] == 1 ||
-        positionOfHead[1] - positionOfTail[1] == 1);
+    const up = positionOfHead[1] - positionOfTail[1] > 0;
+    const down = positionOfHead[1] - positionOfTail[1] < 0;
+    const left = positionOfHead[0] - positionOfTail < 0;
+    const right = positionOfHead[0] - positionOfTail > 0;
 
-    const downToRight =
-      positionOfHead[1] - positionOfTail[1] > 0 &&
-      (positionOfHead[1] - positionOfTail[1] == -1 ||
-        positionOfHead[0] - positionOfTail[0] == 1);
+    const upToRight = up && right;
 
-    const upToLeft =
-      positionOfHead[1] - positionOfTail[1] < 0 &&
-      (positionOfHead[0] - positionOfTail[0] == -1 ||
-        positionOfHead[1] - positionOfTail[1] == 1);
+    const downToRight = down && right;
 
-    const downToLeft =
-      positionOfHead[1] - positionOfTail[1] < 0 &&
-      (positionOfHead[1] - positionOfTail[1] == -1 ||
-        positionOfHead[0] - positionOfTail[0] == -1);
+    const upToLeft = up && left;
+
+    const downToLeft = down && left;
 
     const movedDiagonal = upToRight || downToLeft || upToLeft || downToRight;
+
     if (!movedDiagonal) {
       if (positionOfHead[0] - positionOfTail[0] > 1) {
         positionOfTail[0]++;
@@ -68,9 +62,13 @@ const part1 = (dataSource) => {
       positionOfTail[0]--;
       positionOfTail[1]--;
     }
+    console.log("positionsOfHead", positionOfHead);
+    console.log("positionOfTail", positionOfTail);
 
-    console.log("position of head", positionOfHead);
-    console.log("position of tail", positionOfTail);
+    if (!placesTailHit.includes(`${positionOfTail[0]}${positionOfTail[1]}`)) {
+      placesTailHit.push(`${positionOfTail[0]}${positionOfTail[1]}`);
+    }
+    // console.log("placesTailHit", placesTailHit);
   };
 
   const checkOnTail = () => {
@@ -79,34 +77,48 @@ const part1 = (dataSource) => {
       positionOfHead[1] == positionOfTail[1];
 
     const movedUpDownLeftOrRight =
-      positionOfHead[0] - positionOfTail[0] > 1 ||
-      positionOfHead[0] - positionOfTail[0] < -1 ||
-      positionOfHead[1] - positionOfTail[1] > 1 ||
-      positionOfHead[1] - positionOfTail[1] < -1;
+      positionOfHead[0] - positionOfTail[0] > 0 ||
+      positionOfHead[0] - positionOfTail[0] < 0 ||
+      positionOfHead[1] - positionOfTail[1] > 0 ||
+      positionOfHead[1] - positionOfTail[1] < 0;
+
+    const up = positionOfHead[1] - positionOfTail[1] > 1;
+    const down = positionOfHead[1] - positionOfTail[1] < -1;
 
     const upToRight =
-      positionOfHead[1] - positionOfTail[1] > 0 &&
-      (positionOfHead[0] - positionOfTail[0] == 1 ||
-        positionOfHead[1] - positionOfTail[1] == 1);
-
-    const downToRight =
-      positionOfHead[1] - positionOfTail[1] > 0 &&
-      (positionOfHead[1] - positionOfTail[1] == -1 ||
+      (up &&
+        positionOfHead[0] - positionOfTail[0] > 1 &&
+        positionOfHead[1] - positionOfTail[1] == 1) ||
+      (positionOfHead[1] - positionOfTail[1] > 1 &&
         positionOfHead[0] - positionOfTail[0] == 1);
 
-    const upToLeft =
-      positionOfHead[1] - positionOfTail[1] < 0 &&
-      (positionOfHead[0] - positionOfTail[0] == -1 ||
+    const downToRight =
+      (down &&
+        positionOfHead[1] - positionOfTail[1] < -1 &&
+        positionOfHead[0] - positionOfTail[0] == 1) ||
+      (positionOfHead[0] - positionOfTail[0] < -1 &&
         positionOfHead[1] - positionOfTail[1] == 1);
 
+    const upToLeft =
+      (up &&
+        positionOfHead[0] - positionOfTail[0] > -1 &&
+        positionOfHead[1] - positionOfTail[1] == 1) ||
+      (positionOfHead[1] - positionOfTail[1] > -1 &&
+        positionOfHead[0] - positionOfTail[0] == 1);
+
     const downToLeft =
-      positionOfHead[1] - positionOfTail[1] < 0 &&
-      (positionOfHead[1] - positionOfTail[1] == -1 ||
-        positionOfHead[0] - positionOfTail[0] == -1);
+      (down &&
+        positionOfHead[1] - positionOfTail[1] > -1 &&
+        positionOfHead[0] - positionOfTail[0] == -1) ||
+      (positionOfHead[0] - positionOfTail[0] > -1 &&
+        positionOfHead[1] - positionOfTail[1] == -1);
 
     const movedDiagonal = upToRight || downToLeft || upToLeft || downToRight;
 
-    if (!headAndTailOverLap && (movedUpDownLeftOrRight || movedDiagonal)) {
+    if (
+      (!headAndTailOverLap && (movedUpDownLeftOrRight || !movedDiagonal)) ||
+      movedDiagonal
+    ) {
       moveTail();
     }
   };
@@ -137,3 +149,6 @@ const part1 = (dataSource) => {
 
 part1(testInput);
 // part1(input);
+
+// 6487 to low
+// 6686 to high
