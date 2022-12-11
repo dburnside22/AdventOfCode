@@ -295,4 +295,4 @@ addx -10
 noop
 noop`;
 
-export { testInput1, input };
+export { testInput1, testInput, input };
