@@ -1,0 +1,11 @@
+{
+  "name": "day11",
+  "version": "12.11.2022",
+  "main": "day11.js",
+  "type": "module",
+  "license": "MIT",
+
+  "scripts": {
+    "dev": "node day11.js"
+  }
+}
