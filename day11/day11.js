@@ -95,7 +95,7 @@ const part1 = (dataSource) => {
 // part1(input);
 
 const part2 = (dataSource) => {
-  console.log("Welcome To Day 11");
+  console.log("Welcome To Day 11: part 2");
   const monkeys = dataSource.split("\n\n").map((a) =>
     a.split("\n").map((b) =>
       b
@@ -105,7 +105,7 @@ const part2 = (dataSource) => {
     )
   );
 
-  const getWorryAfterMonkey = (code, old) => {
+  const getWorryAfterMonkey = (code, old, divideBy, modBy) => {
     let total = code.split(" ").map((c, i) => {
       if (c == "old") {
         return old;
@@ -126,11 +126,19 @@ const part2 = (dataSource) => {
 
   const tossItem = (worry, divideBy, toIfTrue, toIfFalse) => {
     if (worry % divideBy == 0) {
+      console.log("true");
       monkeyData[toIfTrue][1].push(worry);
     } else {
+      console.log("false");
       monkeyData[toIfFalse][1].push(worry);
     }
   };
+
+  let toModBy = 1;
+  monkeys.forEach((monkey) => {
+    let divisibleBy = monkey[3][1].split(" ");
+    toModBy *= Number(divisibleBy[2]);
+  });
 
   monkeys.forEach((monkey, i) => {
     let operations = monkey[2][1];
@@ -160,7 +168,7 @@ const part2 = (dataSource) => {
   const runGame = () => {
     monkeyData.forEach((monkey) => {
       monkey[1].forEach((item) => {
-        let worry = getWorryAfterMonkey(monkey[0], item);
+        let worry = getWorryAfterMonkey(monkey[0], item, monkey[2], toModBy);
         tossItem(worry, monkey[2], monkey[3], monkey[4]);
         monkey[5]++;
       });
@@ -168,7 +176,7 @@ const part2 = (dataSource) => {
     });
   };
 
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1; i++) {
     runGame();
   }
 
