@@ -11,19 +11,32 @@ const part1 = (dataSource) => {
     )
   );
 
-  const getTotal = (opperationArray) => {
-    const firstNumber = opperationArray[0];
-    const secondNumber = opperationArray[2];
-    const operation = opperationArray[1];
-
-    if (operation == "*") {
-      return firstNumber * secondNumber;
+  const getWorryAfterMonkey = (code, old) => {
+    let total = code.split(" ").map((c, i) => {
+      if (c == "old") {
+        return old;
+      } else if (i == 4) {
+        return Number(c);
+      } else {
+        return c;
+      }
+    });
+    if (total[3] == "*") {
+      return Math.floor((total[2] * total[4]) / 3);
     } else {
-      return firstNumber + secondNumber;
+      return Math.floor((total[2] + total[4]) / 3);
     }
   };
 
-  let monkeysInfo = [];
+  let monkeyData = [];
+
+  const tossItem = (worry, divideBy, toIfTrue, toIfFalse) => {
+    if (worry % divideBy == 0) {
+      monkeyData[toIfTrue][1].push(worry);
+    } else {
+      monkeyData[toIfFalse][1].push(worry);
+    }
+  };
 
   monkeys.forEach((monkey, i) => {
     let operations = monkey[2][1];
@@ -40,7 +53,7 @@ const part1 = (dataSource) => {
 
     let inspectionCount = 0;
 
-    monkeysInfo.push([
+    monkeyData.push([
       operations,
       startingItems,
       divisibleBy,
@@ -51,34 +64,32 @@ const part1 = (dataSource) => {
   });
 
   const runGame = () => {
-    for (let q = 0; q < monkeysInfo.length; q++) {
-      while (monkeysInfo[q][1].length > 0) {
-        let operation = monkeysInfo[q][0].split(" ").map((d, j) => {
-          if (d == "old") {
-            return monkeysInfo[q][1][0];
-          } else if (j == 4) {
-            return Number(d);
-          } else {
-            return d;
-          }
-        });
-        operation = [operation[2], operation[3], operation[4]];
-        const total = Math.floor(getTotal(operation) / 3);
-        const divisable = total / monkeysInfo[q][2] == 0;
-        monkeysInfo[q][1].shift();
-        divisable
-          ? monkeysInfo[monkeysInfo[q][3]][1].push(total)
-          : monkeysInfo[monkeysInfo[q][4]][1].push(total);
-        monkeysInfo[q][5]++;
-      }
-    }
+    monkeyData.forEach((monkey) => {
+      monkey[1].forEach((item) => {
+        let worry = getWorryAfterMonkey(monkey[0], item);
+        tossItem(worry, monkey[2], monkey[3], monkey[4]);
+        monkey[5]++;
+      });
+      monkey[1] = [];
+    });
   };
 
-  runGame();
-  runGame();
+  for (let i = 0; i < 20; i++) {
+    runGame();
+  }
 
-  console.log(monkeysInfo);
+  monkeyData.sort((a, b) => {
+    if (a[5] < b[5]) {
+      return 1;
+    } else if (a[5] > b[5]) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  console.log(monkeyData[0][5] * monkeyData[1][5]);
 };
 
-part1(testInput);
-// part1(input);
+// part1(testInput);
+part1(input);
