@@ -116,9 +116,9 @@ const part2 = (dataSource) => {
       }
     });
     if (total[3] == "*") {
-      return total[2] * total[4];
+      return modBy + (total[2] % divideBy) * (total[4] % divideBy) * divideBy;
     } else {
-      return total[2] + total[4];
+      return modBy + ((total[2] % divideBy) + (total[4] % divideBy)) * divideBy;
     }
   };
 
