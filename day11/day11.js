@@ -105,7 +105,7 @@ const part2 = (dataSource) => {
     )
   );
 
-  const getWorryAfterMonkey = (code, old, divideBy, modBy) => {
+  const getWorryAfterMonkey = (code, old, divideBy) => {
     let total = code.split(" ").map((c, i) => {
       if (c == "old") {
         return old;
@@ -115,30 +115,32 @@ const part2 = (dataSource) => {
         return c;
       }
     });
+
+    let worryLevel = 0;
     if (total[3] == "*") {
-      return modBy + (total[2] % divideBy) * (total[4] % divideBy) * divideBy;
+      worryLevel = total[2] * total[4];
     } else {
-      return modBy + ((total[2] % divideBy) + (total[4] % divideBy)) * divideBy;
+      worryLevel = total[2] + total[4];
     }
+
+    return worryLevel;
   };
 
   let monkeyData = [];
-
-  const tossItem = (worry, divideBy, toIfTrue, toIfFalse) => {
-    if (worry % divideBy == 0) {
-      console.log("true");
-      monkeyData[toIfTrue][1].push(worry);
-    } else {
-      console.log("false");
-      monkeyData[toIfFalse][1].push(worry);
-    }
-  };
 
   let toModBy = 1;
   monkeys.forEach((monkey) => {
     let divisibleBy = monkey[3][1].split(" ");
     toModBy *= Number(divisibleBy[2]);
   });
+
+  const tossItem = (worry, divideBy, toIfTrue, toIfFalse) => {
+    if (worry % divideBy === 0) {
+      monkeyData[toIfTrue][1].push(worry % toModBy);
+    } else {
+      monkeyData[toIfFalse][1].push(worry % toModBy);
+    }
+  };
 
   monkeys.forEach((monkey, i) => {
     let operations = monkey[2][1];
@@ -168,7 +170,7 @@ const part2 = (dataSource) => {
   const runGame = () => {
     monkeyData.forEach((monkey) => {
       monkey[1].forEach((item) => {
-        let worry = getWorryAfterMonkey(monkey[0], item, monkey[2], toModBy);
+        let worry = getWorryAfterMonkey(monkey[0], item, monkey[2]);
         tossItem(worry, monkey[2], monkey[3], monkey[4]);
         monkey[5]++;
       });
@@ -176,7 +178,7 @@ const part2 = (dataSource) => {
     });
   };
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10000; i++) {
     runGame();
   }
 
@@ -190,9 +192,8 @@ const part2 = (dataSource) => {
     }
   });
 
-  console.log(monkeyData);
   console.log(monkeyData[0][5] * monkeyData[1][5]);
 };
 
-part2(testInput);
-// part2(input);
+// part2(testInput);
+part2(input);
