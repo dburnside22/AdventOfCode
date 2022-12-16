@@ -5,54 +5,52 @@ const part1 = (dataSource) => {
   const splitInput = dataSource.split("\n\n").map((a) => a.split("\n"));
   let indexes = [];
 
-  const isInRightOrder = (
-    firstDigits,
-    secondDigits,
-    firstLength,
-    secondLength
-  ) => {
-    if (firstDigits == null) {
-      if (secondDigits == null) {
-        return firstLength <= secondLength;
-      } else {
-        return true;
-      }
-    } else {
-      if (secondDigits == null) {
-        return false;
-      }
+  const compareArrays = (firstArray, secondArray) => {
+    const maxLength = Math.min(firstArray.length, secondArray.length);
+    let rightOrder = true;
+    if (maxLength == 0) {
+      rightOrder = !(secondArray.length < firstArray.length);
     }
-    const smallestLength = Math.min(firstDigits.length, secondDigits.length);
-
-    for (let i = 0; i < smallestLength; i++) {
-      if (firstDigits[i] > secondDigits[i]) {
-        return false;
-      }
-      if (i == smallestLength - 1) {
-        if (
-          secondDigits[i] === firstDigits[i] &&
-          secondDigits.length < firstDigits.length
-        ) {
-          return false;
+    for (let i = 0; i < maxLength; i++) {
+      if (rightOrder != false) {
+        if (secondArray[i] < firstArray[i]) {
+          rightOrder = false;
         }
       }
     }
-    return true;
+    return rightOrder;
   };
 
+  const processValues = (firstValues, secondValues) => {
+    const maxLength = Math.min(firstValues.length, secondValues.length);
+    let rightOrder = true;
+    for (let i = 0; i < maxLength; i++) {
+      if (rightOrder != false) {
+        const firstValueAsArray = Array.isArray(firstValues[i])
+          ? firstValues[i]
+          : [firstValues[i]];
+        const secondValueAsArray = Array.isArray(secondValues[i])
+          ? secondValues[i]
+          : [secondValues[i]];
+
+        rightOrder = compareArrays(firstValueAsArray, secondValueAsArray);
+      }
+      if (
+        i == maxLength - 1 &&
+        rightOrder &&
+        firstValues.length > secondValues.length
+      ) {
+        rightOrder = false;
+      }
+    }
+    return rightOrder;
+  };
+  // console.log("splitInput", splitInput);
+
   splitInput.forEach(([first, second], index) => {
-    // this is not going to work because it is only getting tehe numbers I need to get the []'s to because [] < [9]
-    // Array.isArray method will probably be need here
-    const digitsInFirst = first.match(/\d/g);
-    const digitsInSecond = second.match(/\d/g);
-
-    const rightOrder = isInRightOrder(
-      digitsInFirst,
-      digitsInSecond,
-      first.length,
-      second.length
-    );
-
+    const valuesOfFirst = eval(first);
+    const valuesOfSecond = eval(second);
+    const rightOrder = processValues(valuesOfFirst, valuesOfSecond);
     if (rightOrder) {
       indexes.push(index + 1);
     }
@@ -65,3 +63,4 @@ const part1 = (dataSource) => {
 part1(input);
 
 // 462 to low
+// 1570 to low
