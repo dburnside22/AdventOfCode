@@ -5,49 +5,51 @@ const part1 = (dataSource) => {
   const splitInput = dataSource.split("\n\n").map((a) => a.split("\n"));
   let indexes = [];
 
-  const compareArrays = (one, two) => {};
-
-  const processValues = (firstValues, secondValues) => {
-    // console.log("firstValue", firstValues);
-    // console.log("secondValues", secondValues);
-    const maxLength = Math.min(firstValues.length, secondValues.length);
-
-    let rightOrder = true;
-
-    for (let i = 0; i < firstValues.length; i++) {
-      const firstIsArray = Array.isArray(firstValues[i]);
-      const secondIsArray = Array.isArray(secondValues[i]);
-      if (firstIsArray && !secondIsArray && rightOrder) {
-        rightOrder = compareArrays(firstValues[i], [secondValues[i]]);
+  let rightOrder = "unknown";
+  const processValues = (left, right) => {
+    if (Number.isInteger(left) && Number.isInteger(right)) {
+      if (left > right) {
+        rightOrder = "no";
+        return rightOrder;
       }
-      if (!firstIsArray && secondIsArray && rightOrder) {
-        rightOrder = compareArrays([firstValues[i]], secondValues[i]);
+      if (right > left) {
+        rightOrder = "yes";
+        return rightOrder;
       }
-      if (firstIsArray && secondIsArray && rightOrder) {
-        rightOrder = compareArrays(firstValues[i], secondValues[i]);
+    } else if (Array.isArray(left) && !Array.isArray(right)) {
+      return processValues(left, [right]);
+    } else if (!Array.isArray(left) && Array.isArray(right)) {
+      return processValues([left], right);
+    } else {
+      if (left == undefined && right !== undefined) {
+        rightOrder = "yes";
+        return rightOrder;
+      } else if (right == undefined && left !== undefined) {
+        rightOrder = "no";
+        return rightOrder;
+      }
+      const max = Math.max(left.length, right.length);
+      for (let i = 0; i < max; i++) {
+        let result = processValues(left[i], right[i]);
+        if (result != "unknown") return result;
       }
 
-      if (firstValues[i] > secondValues[i]) {
-        return false;
+      if (left.length < right.length) {
+        rightOrder = "yes";
+        return rightOrder;
       }
-
-      if (
-        firstValues[i] == secondValues[i] &&
-        firstValues.length > secondValues.length &&
-        i == firstValues.length - 1
-      ) {
-        return false;
+      if (left.length > right.length) {
+        rightOrder = "no";
+        return rightOrder;
       }
     }
-    return rightOrder;
   };
-  // console.log("splitInput", splitInput);
 
   splitInput.forEach(([first, second], index) => {
     const valuesOfFirst = JSON.parse(first);
     const valuesOfSecond = JSON.parse(second);
     const rightOrder = processValues(valuesOfFirst, valuesOfSecond);
-    if (rightOrder) {
+    if (rightOrder == "yes") {
       indexes.push(index + 1);
     }
   });
@@ -61,3 +63,10 @@ part1(testInput);
 // 462 to low
 // 1570 to low
 // 1384 to low
+// 6926
+// 6657
+// 6682
+// 6120
+// 5421
+// 5331
+// 5319
