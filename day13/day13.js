@@ -5,60 +5,63 @@ const part1 = (dataSource) => {
   const splitInput = dataSource.split("\n\n").map((a) => a.split("\n"));
   let indexes = [];
 
-  let rightOrder = "unknown";
-  const processValues = (left, right) => {
-    if (Number.isInteger(left) && Number.isInteger(right)) {
+  const processValues = (left, right, result) => {
+    const leftIsNumber = typeof left === "number";
+    const rightIsNumber = typeof right === "number";
+    if (leftIsNumber && rightIsNumber) {
+      if (left < right) {
+        result.rightOrder = true;
+        return;
+      }
       if (left > right) {
-        rightOrder = "no";
-        return rightOrder;
+        result.rightOrder = false;
+        return;
       }
-      if (right > left) {
-        rightOrder = "yes";
-        return rightOrder;
-      }
-    } else if (Array.isArray(left) && !Array.isArray(right)) {
-      return processValues(left, [right]);
-    } else if (!Array.isArray(left) && Array.isArray(right)) {
-      return processValues([left], right);
-    } else {
-      if (left == undefined && right !== undefined) {
-        rightOrder = "yes";
-        return rightOrder;
-      } else if (right == undefined && left !== undefined) {
-        rightOrder = "no";
-        return rightOrder;
-      }
-      const max = Math.max(left.length, right.length);
-      for (let i = 0; i < max; i++) {
-        let result = processValues(left[i], right[i]);
-        if (result != "unknown") return result;
-      }
+    } else if (!leftIsNumber && !rightIsNumber) {
+      let i = 0;
+      while (true) {
+        if (i > left.length - 1 && i <= right.length - 1) {
+          // left runs out first
+          result.rightOrder = true;
+          return;
+        } else if (i <= left.length - 1 && i > right.length - 1) {
+          // right runs out first
+          result.rightOrder = false;
+          return;
+        } else if (i > left.length - 1 && i > right.length - 1) {
+          // both runs out
+          return;
+        }
+        processValues(left[i], right[i], result);
+        if (typeof result.rightOrder !== "undefined") {
+          return;
+        }
 
-      if (left.length < right.length) {
-        rightOrder = "yes";
-        return rightOrder;
+        i++;
       }
-      if (left.length > right.length) {
-        rightOrder = "no";
-        return rightOrder;
+    } else {
+      if (leftIsNumber) {
+        processValues([left], right, result);
+      } else {
+        processValues(left, [right], result);
       }
     }
   };
 
   splitInput.forEach(([first, second], index) => {
+    let result = {};
     const valuesOfFirst = JSON.parse(first);
     const valuesOfSecond = JSON.parse(second);
-    const rightOrder = processValues(valuesOfFirst, valuesOfSecond);
-    if (rightOrder == "yes") {
+    processValues(valuesOfFirst, valuesOfSecond, result);
+    if (result.rightOrder) {
       indexes.push(index + 1);
     }
   });
-  console.log(indexes);
   console.log(indexes.reduce((a, b) => a + b));
 };
 
-part1(testInput);
-// part1(input);
+// part1(testInput);
+part1(input);
 
 // 462 to low
 // 1570 to low
@@ -70,3 +73,4 @@ part1(testInput);
 // 5421
 // 5331
 // 5319
+// The right answer 6623!!!!!!!!!!!!
