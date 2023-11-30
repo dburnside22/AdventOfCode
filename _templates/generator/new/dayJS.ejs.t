@@ -1,5 +1,5 @@
 ---
-to: day<%= day %>/day<%= day %>.js
+to: 2023/day<%= day %>/day<%= day %>.js
 ---
 
 import {input, testInput} from './input.js';

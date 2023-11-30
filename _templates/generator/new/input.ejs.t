@@ -1,5 +1,5 @@
 ---
-to: day<%= day %>/input.js
+to: 2023/day<%= day %>/input.js
 ---
 
 const testInput = [];
