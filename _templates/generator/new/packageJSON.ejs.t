@@ -1,10 +1,10 @@
 ---
-to: 2023/day<%= day %>/package.json
+to: 2024/day<%= day %>/package.json
 ---
 
 {
   "name": "day<%= day %>",
-  "version": "12.<%= day %>.2023",
+  "version": "12.<%= day %>.2024",
   "main": "day<%=day%>.js",
   "type": "module",
   "license": "MIT",
