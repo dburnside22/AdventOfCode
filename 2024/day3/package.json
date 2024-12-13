@@ -1,0 +1,11 @@
+{
+  "name": "day3",
+  "version": "12.3.2024",
+  "main": "day3.js",
+  "type": "module",
+  "license": "MIT",
+
+  "scripts": {
+    "dev": "node day3.js"
+  }
+}
